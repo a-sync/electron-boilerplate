@@ -1,7 +1,7 @@
 'use strict';
-const electron = require('electron');
-
-const app = electron.app;
+const {app, ipcMain, BrowserWindow} = require('electron');
+//app.commandLine.appendSwitch('--allow-http-screen-capture');
+//app.commandLine.appendSwitch('--enable-usermedia-screen-capturing');
 
 // Adds debug features like hotkeys for triggering dev tools and reload
 require('electron-debug')();
@@ -17,9 +17,13 @@ function onClosed() {
 }
 
 function createMainWindow() {
-    const win = new electron.BrowserWindow({
-        width: 600,
-        height: 400
+    const win = new BrowserWindow({
+        width: 800,
+        height: 600,
+        webPreferences: {
+            nodeIntegration: false,
+            preload: require('path').join(__dirname, 'preload.js')
+        }
     });
 
     const url = require('url').format({
